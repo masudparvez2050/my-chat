@@ -11,12 +11,23 @@ const cookieParser = require("cookie-parser");
 dotenv.config();
 connectDB();
 
-
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-app.use(cors({ origin: "https://my-chat-50.vercel.app/", credentials: true }));
+// CORS configuration for multiple origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://my-chat-50.vercel.app",
+  "http://192.168.31.105:5173",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -25,11 +36,7 @@ app.use("/api/chat", chatRoutes);
 
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://my-chat-50.vercel.app/",
-      "http://192.168.31.105:5173",
-    ],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -58,33 +65,6 @@ io.on("connection", (socket) => {
     io.emit("chat message", message);
   });
 
-  // // Handle 1-to-1 chat messages
-  // socket.on("chat message", ({ senderId, receiverId, text }) => {
-  //   console.log("Current users:", users); // Log the current users array
-  //   const sender = users.find((user) => user.id === senderId);
-  //   const receiver = users.find((user) => user.id === receiverId);
-
-  //   if (!sender) {
-  //     console.log("Sender not found:", senderId);
-  //     socket.emit("error", "Sender not found");
-  //     return;
-  //   }
-
-  //   if (!receiver) {
-  //     console.log("Receiver not found or offline:", receiverId);
-  //     socket.emit("error", "Receiver not found or offline");
-  //     return;
-  //   }
-
-  //   console.log("Message received:", senderId, receiverId, text);
-  //   io.to(receiver.socketId).emit("chat message", {
-  //     senderId,
-  //     text,
-  //     timestamp: new Date().toISOString(),
-  //   });
-  // });
-
-  // Handle 1-to-many (broadcast) chat message
   socket.on("broadcast message", ({ senderId, text }) => {
     io.emit("broadcast message", {
       senderId,
@@ -110,3 +90,31 @@ io.on("connection", (socket) => {
 server.listen(3001, () => {
   console.log("Server running on port 3001");
 });
+
+// // Handle 1-to-1 chat messages
+// socket.on("chat message", ({ senderId, receiverId, text }) => {
+//   console.log("Current users:", users); // Log the current users array
+//   const sender = users.find((user) => user.id === senderId);
+//   const receiver = users.find((user) => user.id === receiverId);
+
+//   if (!sender) {
+//     console.log("Sender not found:", senderId);
+//     socket.emit("error", "Sender not found");
+//     return;
+//   }
+
+//   if (!receiver) {
+//     console.log("Receiver not found or offline:", receiverId);
+//     socket.emit("error", "Receiver not found or offline");
+//     return;
+//   }
+
+//   console.log("Message received:", senderId, receiverId, text);
+//   io.to(receiver.socketId).emit("chat message", {
+//     senderId,
+//     text,
+//     timestamp: new Date().toISOString(),
+//   });
+// });
+
+// Handle 1-to-many (broadcast) chat message
