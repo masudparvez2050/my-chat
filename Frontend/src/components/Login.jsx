@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   setSessionCookie,
   setSessionCookieUserEmail,
@@ -18,6 +18,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const { setUser, setUserData } = useContext(AuthContext);
   const socket = useContext(SocketContext);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -40,6 +41,8 @@ export default function Login() {
       setUserData(JSON.parse(localStorage.getItem("userData")));
 
       socket.emit("login", data.user.id);
+      // Redirect to home or show a success message
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
