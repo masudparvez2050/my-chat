@@ -5,6 +5,7 @@ import { CiImageOn } from "react-icons/ci";
 import { IoMdAttach } from "react-icons/io";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
+import { ApiUrl } from "../utils/url";
 
 export default function MessageInput() {
   const socket = useContext(SocketContext);
@@ -27,7 +28,7 @@ export default function MessageInput() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/chat/message",
+        ` ${ApiUrl}/api/chat/message`,
         {
           senderId: user.id,
           receiverId: selectedUser,

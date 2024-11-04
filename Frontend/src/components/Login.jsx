@@ -11,6 +11,7 @@ import {
 } from "../utils/Session";
 import { SocketContext } from "../context/SocketContext";
 import { motion } from "framer-motion";
+import { ApiUrl } from "../utils/url";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -21,10 +22,10 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        "http://localhost:3001/api/auth/login",
-        { email, password }
-      );
+      const { data } = await axios.post(`${ApiUrl}/api/auth/login`, {
+        email,
+        password,
+      });
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("userData", JSON.stringify(data.user));

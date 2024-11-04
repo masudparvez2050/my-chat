@@ -5,6 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import { SocketContext } from "../context/SocketContext";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { ApiUrl } from "../utils/url";
 
 export default function ChatWindow() {
   const socket = useContext(SocketContext);
@@ -15,7 +16,7 @@ export default function ChatWindow() {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/chat/messages/${user.id}/${selectedUser}`,
+          `${ApiUrl}/api/chat/messages/${user.id}/${selectedUser}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

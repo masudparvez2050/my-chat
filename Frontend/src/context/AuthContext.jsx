@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { SocketContext } from "./SocketContext";
+import { ApiUrl } from "../utils/url";
 
 export const AuthContext = createContext();
 
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }) => {
     if (user && token) {
       try {
         await axios.post(
-          "http://localhost:3001/api/auth/logout",
+          `${ApiUrl}/api/auth/logout`,
           { id: user.id },
           {
             headers: {

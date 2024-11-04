@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { io } from "socket.io-client";
+import { ApiUrl } from "../utils/url";
 
-const socket = io("http://localhost:3001");
+const socket = io(ApiUrl);
 export const SocketContext = createContext(socket);

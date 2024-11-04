@@ -5,6 +5,7 @@ import axios from "axios";
 import { CiLogout } from "react-icons/ci";
 import Cookies from "js-cookie";
 import { clearSessionCookie } from "../utils/Session";
+import { ApiUrl } from "../utils/url";
 
 export default function UserList({ onUserSelect }) {
   const { user, users, setUsers, logout, selectedUser, setSelectedUser } =
@@ -14,7 +15,7 @@ export default function UserList({ onUserSelect }) {
     const fetchUsers = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:3001/api/auth/users",
+          ` ${ApiUrl}/api/auth/users`,
           {
             headers: {
               Authorization: `Bearer ${Cookies.get("token")}`,

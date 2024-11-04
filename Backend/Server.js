@@ -11,10 +11,12 @@ const cookieParser = require("cookie-parser");
 dotenv.config();
 connectDB();
 
+
 const app = express();
 const server = http.createServer(app);
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "https://my-chat-50.vercel.app/", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -23,7 +25,11 @@ app.use("/api/chat", chatRoutes);
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://192.168.31.105:5173"],
+    origin: [
+      "http://localhost:5173",
+      "https://my-chat-50.vercel.app/",
+      "http://192.168.31.105:5173",
+    ],
     methods: ["GET", "POST"],
     credentials: true,
   },
